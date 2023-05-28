@@ -35,6 +35,7 @@ All declarative components to use suspense on both CSR, SSR.
 - ErrorBoundary
 - ErrorBoundaryGroup, useErrorBoundaryGroup
 - AsyncBoundary (CSROnly mode)
+- suspenseCache (Experimental)
 - Delay (Experimental)
 - SuspensiveProvider, SuspensiveConfigs (Experimental)
 - HOC(Higher Order Component)s for all components

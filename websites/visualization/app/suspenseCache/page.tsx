@@ -2,63 +2,39 @@
 
 import { ComponentProps } from 'react'
 import { ErrorBoundary, ErrorBoundaryGroup, Suspense, suspenseCache } from '@suspensive/react'
+import { api } from '../../api'
 import { Area, Box, Button } from '../../components/uis'
 
-const delay = (ms: number) =>
-  new Promise((resolve) => {
-    setTimeout(() => {
-      resolve('finish')
-    }, ms)
-  })
+const manual1 = suspenseCache(['manual1'] as const, api.manual)
+const manual3 = suspenseCache(['manual3'] as const, api.manual)
 
-const mock1 = suspenseCache(['mock1'] as const, async (maxMs: number) => {
-  await delay(maxMs * Math.random())
-  if (Math.random() > 0.5) {
-    throw new Error('error in fetchMock')
-  }
-
-  return 'Success in mock1 in suspensive cache 🎉' as const
-})
-
-const mock3 = suspenseCache(['mock3'] as const, async (maxMs: number) => {
-  await delay(maxMs * Math.random())
-  if (Math.random() > 0.5) {
-    throw new Error('error in fetchMock')
-  }
-
-  return 'Success in mock3 in suspensive cache 🎉' as const
-})
-
-const Mock1User1 = () => {
-  const mock1Cache = mock1.useCache(3000)
-  console.log('Mock1User1: rerender')
+const Manual1User1 = () => {
+  const manual1Cache = manual1.useCache({ successPercentage: 50, waitMs: 500 })
 
   return (
     <Box.Success>
-      <Button onClick={mock1Cache.reset}>↻</Button>
-      {mock1Cache.data}
+      <Button onClick={manual1Cache.reset}>↻</Button>
+      {manual1Cache.data}
     </Box.Success>
   )
 }
-const Mock1User2 = () => {
-  const mock1Cache = mock1.useCache(1500)
-  console.log('Mock1User2: rerender')
+const Manual1User2 = () => {
+  const manual1Cache = manual1.useCache({ successPercentage: 50, waitMs: 500 })
 
   return (
     <Box.Success>
-      <Button onClick={mock1Cache.reset}>↻</Button>
-      {mock1Cache.data}
+      <Button onClick={manual1Cache.reset}>↻</Button>
+      {manual1Cache.data}
     </Box.Success>
   )
 }
-const Mock3User = () => {
-  const mock3Cache = mock3.useCache(1000)
-  console.log('Mock3User: rerender')
+const Manual3User = () => {
+  const manual3Cache = manual3.useCache({ successPercentage: 50, waitMs: 500 })
 
   return (
     <Box.Success>
-      <Button onClick={mock3Cache.reset}>↻</Button>
-      {mock3Cache.data}
+      <Button onClick={manual3Cache.reset}>↻</Button>
+      {manual3Cache.data}
     </Box.Success>
   )
 }
@@ -68,31 +44,31 @@ const BoundaryPage = () => (
     <button
       type="button"
       onClick={() => {
-        console.log(mock1.getData())
+        console.log(manual1.getData())
       }}
     >
       getData
     </button>
     <ErrorBoundaryGroup>
       <ErrorBoundaryGroup.Reset trigger={(group) => <Button onClick={group.reset}>↻</Button>} />
-      <Area title="suspenseCache: Mock1User1">
+      <Area title="suspenseCache: Manual1User1">
         <ErrorBoundary fallback={ErrorBoundaryFallback}>
           <Suspense.CSROnly>
-            <Mock1User1 />
+            <Manual1User1 />
           </Suspense.CSROnly>
         </ErrorBoundary>
       </Area>
-      <Area title="suspenseCache: Mock1User2">
+      <Area title="suspenseCache: Manual1User2">
         <ErrorBoundary fallback={ErrorBoundaryFallback}>
           <Suspense.CSROnly>
-            <Mock1User2 />
+            <Manual1User2 />
           </Suspense.CSROnly>
         </ErrorBoundary>
       </Area>
-      <Area title="suspenseCache: Mock3User">
+      <Area title="suspenseCache: Manual3User">
         <ErrorBoundary fallback={ErrorBoundaryFallback}>
           <Suspense.CSROnly>
-            <Mock3User />
+            <Manual3User />
           </Suspense.CSROnly>
         </ErrorBoundary>
       </Area>
