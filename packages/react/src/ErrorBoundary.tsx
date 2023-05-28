@@ -15,6 +15,7 @@ import {
   useRef,
 } from 'react'
 import { ErrorBoundaryGroupContext } from './ErrorBoundaryGroup'
+import { observer } from './suspenseCache'
 import { ComponentPropsWithoutChildren } from './types'
 import { hasResetKeysChanged } from './utils'
 
@@ -84,6 +85,7 @@ class BaseErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState
   }
 
   reset() {
+    observer.errorClear()
     this.setState(initialState)
   }
 
